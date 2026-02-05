@@ -1,0 +1,36 @@
+:root {
+    --main-pink: #f472b6;
+    --dark-pink: #be185d;
+    --soft-bg: #fff1f2;
+    --white: #ffffff;
+    --correct: #10b981;
+    --wrong: #ef4444;
+}
+
+* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { margin: 0; background: var(--soft-bg); direction: rtl; }
+
+.header { background: var(--dark-pink); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.quiz-box { padding: 20px; max-width: 550px; margin: 0 auto; }
+
+.card { background: var(--white); border-radius: 30px; padding: 30px; box-shadow: 0 15px 30px rgba(190, 24, 93, 0.1); text-align: center; }
+.tag { background: var(--soft-bg); color: var(--dark-pink); padding: 5px 15px; border-radius: 12px; font-weight: bold; font-size: 0.9rem; }
+
+h2 { font-size: 1.3rem; color: #374151; margin: 25px 0; line-height: 1.6; }
+
+.options-grid { display: grid; gap: 12px; }
+.option { padding: 15px; border: 2px solid #fce7f3; border-radius: 15px; cursor: pointer; transition: 0.3s; background: white; text-align: right; }
+.option:hover { border-color: var(--main-pink); background: var(--soft-bg); }
+
+input[type="text"] { width: 100%; padding: 15px; border: 2px solid #fce7f3; border-radius: 15px; font-size: 1.1rem; text-align: center; margin-bottom: 15px; outline: none; }
+
+.btn-main { background: var(--dark-pink); color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
+
+.correct { background: #d1fae5 !important; border-color: var(--correct) !important; color: #065f46; }
+.wrong { background: #fee2e2 !important; border-color: var(--wrong) !important; color: #991b1b; }
+
+.feedback { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: bold; }
+.bar { background: #ffe4e6; height: 10px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+#progress-fill { background: var(--main-pink); height: 100%; width: 0%; transition: 0.4s; }
+.hidden { display: none; }
+.trophy { font-size: 4rem; color: #fbbf24; margin-bottom: 20px; }

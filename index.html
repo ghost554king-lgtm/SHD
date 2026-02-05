@@ -1,192 +1,51 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة شهد ✨</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #ffeaf2;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-        }
-
-        /* شاشة الترحيب */
-        #welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ff4d94;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            transition: opacity 0.5s ease;
-        }
-
-        #welcome-screen h1 {
-            font-size: 50px;
-            margin-bottom: 20px;
-            animation: bounce 1s infinite;
-        }
-
-        #start-btn {
-            padding: 15px 40px;
-            font-size: 20px;
-            background: white;
-            color: #ff4d94;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* منطقة اللعبة */
-        #game-container {
-            display: none; /* مخفي في البداية */
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
-        }
-
-        #player {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            width: 70px;
-            height: 70px;
-            font-size: 50px;
-            cursor: pointer;
-            touch-action: none;
-        }
-
-        .item {
-            position: absolute;
-            font-size: 35px;
-        }
-
-        #score-board {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            color: white;
-            background: rgba(216, 27, 96, 0.6);
-            padding: 10px 25px;
-            border-radius: 50px;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-    </style>
+    <title>منصة المهندسة شهد | الدعامة في الإنسان</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="app-container">
+        <header class="header">
+            <div class="user-profile">
+                <i class="fas fa-hard-hat"></i>
+                <span>البشمهندسة شهد</span>
+            </div>
+            <div class="live-score">النقاط: <span id="score">0</span></div>
+        </header>
 
-<div id="welcome-screen">
-    <h1>يا شهد يا قمر ! 😂💖</h1>
-    <button id="start-btn">اضغطي هنا عشان تلعبي</button>
-</div>
+        <main class="quiz-box">
+            <div class="progress-section">
+                <div class="bar"><div id="progress-fill"></div></div>
+                <div id="q-info">جاري التحميل...</div>
+            </div>
 
-<div id="game-container">
-    <div id="score-board">النقاط: 0</div>
-    <div id="player">💃</div>
-</div>
+            <div id="card" class="card">
+                <div id="category" class="tag">الدعامة</div>
+                <h2 id="q-text">هل أنتِ مستعدة يا شهد؟</h2>
+                
+                <div id="options" class="options-grid"></div>
 
-<script>
-    const welcomeScreen = document.getElementById('welcome-screen');
-    const startBtn = document.getElementById('start-btn');
-    const gameContainer = document.getElementById('game-container');
-    const player = document.getElementById('player');
-    const scoreBoard = document.getElementById('score-board');
+                <div id="input-zone" class="hidden">
+                    <input type="text" id="user-input" placeholder="اكتبي إجابتك هنا...">
+                    <button onclick="checkInputAnswer()" class="btn-main">تأكيد</button>
+                </div>
 
-    let score = 0;
-    let gameActive = false;
+                <div id="feedback" class="feedback hidden"></div>
+                <button id="next-btn" class="btn-main hidden">السؤال التالي <i class="fas fa-arrow-left"></i></button>
+            </div>
 
-    // تشغيل اللعبة عند الضغط على الزر
-    startBtn.addEventListener('click', () => {
-        welcomeScreen.style.opacity = '0';
-        setTimeout(() => {
-            welcomeScreen.style.display = 'none';
-            gameContainer.style.display = 'block';
-            gameActive = true;
-            startGame();
-        }, 500);
-    });
-
-    // تحريك اللاعب
-    document.addEventListener('mousemove', (e) => {
-        if (!gameActive) return;
-        let x = e.clientX - 35;
-        player.style.left = x + 'px';
-    });
-
-    // دعم الموبايل
-    document.addEventListener('touchmove', (e) => {
-        if (!gameActive) return;
-        let x = e.touches[0].clientX - 35;
-        player.style.left = x + 'px';
-    });
-
-    function createFallingItem() {
-        if (!gameActive) return;
-
-        const item = document.createElement('div');
-        item.classList.add('item');
-        
-        const types = ['💎', '💖', '🍭', '🍓', '💣'];
-        const randomType = types[Math.floor(Math.random() * types.length)];
-        
-        item.innerText = randomType;
-        item.style.left = Math.random() * (window.innerWidth - 40) + 'px';
-        item.style.top = '-50px';
-        gameContainer.appendChild(item);
-
-        let speed = 4 + Math.random() * 5;
-        let pos = -50;
-
-        function fall() {
-            if (!gameActive) return;
-            pos += speed;
-            item.style.top = pos + 'px';
-
-            const pRect = player.getBoundingClientRect();
-            const iRect = item.getBoundingClientRect();
-
-            if (iRect.bottom > pRect.top && iRect.left < pRect.right && iRect.right > pRect.left) {
-                if (randomType === '💣') {
-                    alert("خسرتي يا شهد! ركزي شوية 😂. نقاطك: " + score);
-                    score = 0;
-                } else {
-                    score += 10;
-                }
-                scoreBoard.innerText = `النقاط: ${score}`;
-                item.remove();
-                return;
-            }
-
-            if (pos < window.innerHeight) {
-                requestAnimationFrame(fall);
-            } else {
-                item.remove();
-            }
-        }
-        requestAnimationFrame(fall);
-    }
-
-    function startGame() {
-        setInterval(createFallingItem, 700);
-    }
-</script>
-
+            <div id="result-screen" class="card hidden">
+                <i class="fas fa-award trophy"></i>
+                <h2>إنجاز هندسي مذهل!</h2>
+                <p id="final-msg"></p>
+                <button onclick="location.reload()" class="btn-main">إعادة الاختبار</button>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
